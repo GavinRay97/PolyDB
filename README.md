@@ -21,10 +21,7 @@ JOIN mongo.review_db.reviews    r ON p.id = r.product_id AND u.id = r.user_id
 
 ## How is This Different From Google's "MCP Toolbox for Databases"?
 
-Google recently announced an MCP tool for interacting with databases:
-
-- https://cloud.google.com/blog/products/ai-machine-learning/mcp-toolbox-for-databases-now-supports-model-context-protocol
-- https://github.com/googleapis/genai-toolbox
+Google [recently announced](https://cloud.google.com/blog/products/ai-machine-learning/mcp-toolbox-for-databases-now-supports-model-context-protocol) an [MCP tool for interacting with databases](https://github.com/googleapis/genai-toolbox):
 
 The key differences are **federated queries vs. multiple tool calls** and **datasource availability**.
 
@@ -69,7 +66,6 @@ result = merge_and_analyze(users, orders, reviews)
 - **MCP Integration**: Exposes tools for AI agents (e.g., Claude, GPT) to interact with databases programmatically, including listing tables and executing queries.
 - **Caching**: Uses Quarkus caching for efficient metadata retrieval (datasources, schemas, tables).
 - **OpenAPI Support**: Automatically generates OpenAPI specs for REST endpoints.
-- **Coroutine Support**: Leverages Kotlin coroutines for parallel operations on datasources.
 
 ## How It Works
 

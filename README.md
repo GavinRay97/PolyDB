@@ -4,6 +4,10 @@ PolyDB is an OpenAPI + MCP service that allows connecting any datasource that ha
 
 Here's a demo, asking Claude Code to query `Postgres <-> MySQL <-> MongoDB` databases containing e-commerce-like data:
 
+> **Fair warning:** This is what happens when I get bored on weekends.
+> 
+> For actual production workloads, check out my day job where we've solved these problems properly: https://promptql.io
+
 ```sql
 SELECT /* ... */
 FROM pg.user_db.public.users    u

@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  # jdbc:postgresql://user:password@localhost:5432/user_db
+  postgres:
+    image: postgres:17.5
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_db
+    volumes:
+      - ./docker/init/postgres:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+  # jdbc:mysql://localhost:3306/order_db?user=user&password=password
+  mysql:
+    image: mysql:9.3
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: order_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./docker/init/mysql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  
+  # mongodb://root:password@localhost:27017/review_db?authSource=admin
+  mongo:
+    image: mongo:8.0.11
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./docker/init/mongo:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"

@@ -1,0 +1,17 @@
+[*.{kt,kts}]
+# max line length
+max_line_length = 120
+ktlint_standard_max-line-length = 120
+
+# always use imports with wildcard imports
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_static = 999
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_no-wildcard-import = disabled
+
+# Disable class naming convention check
+ktlint_standard_class-naming = disabled
+# Disable argument list wrapping rule
+ktlint_standard_argument-list-wrapping = disabled
+# Disable property naming convention check
+ktlint_standard_property-naming = disabled

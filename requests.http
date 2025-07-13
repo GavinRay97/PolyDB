@@ -1,0 +1,59 @@
+### PolyDB API Testing
+### Base URL: http://localhost:8080
+
+### List all datasources
+GET http://localhost:8080/api/v1/datasources
+Accept: application/json
+
+### Add a new datasource (PostgreSQL example)
+POST http://localhost:8080/api/v1/datasources
+Content-Type: application/json
+
+{
+  "name": "postgres_users",
+  "jdbcUrl": "jdbc:postgresql://localhost:5432/user_db?user=user&password=password"
+}
+
+### Add a new datasource (MySQL example)
+POST http://localhost:8080/api/v1/datasources
+Content-Type: application/json
+
+{
+  "name": "mysql_orders",
+  "jdbcUrl": "jdbc:mysql://localhost:3306/order_db?user=user&password=password"
+}
+
+### Add a new datasource (MongoDB DocumentDB example)
+POST http://localhost:8080/api/v1/datasources
+Content-Type: application/json
+
+{
+  "name": "mongo_reviews",
+  "jdbcUrl": "jdbc:documentdb://root:password@localhost:27017/review_db?defaultAuthDb=admin&ssl=false&tls=false"
+}
+
+
+### Execute a SQL query
+POST http://localhost:8080/api/v1/query
+Content-Type: text/plain
+
+EXPLAIN PLAN AS DOT FOR SELECT U.FIRST_NAME,
+       U.LAST_NAME,
+       U.EMAIL,
+       O.ID ORDER_ID,
+       O.ORDER_DATE,
+       O.STATUS ORDER_STATUS,
+       P.NAME PRODUCT_NAME,
+       P.PRICE PRODUCT_PRICE,
+       OI.QUANTITY,
+       (OI.PRICE * OI.QUANTITY) LINE_TOTAL,
+       R.RATING,
+       R.COMMENT REVIEW_COMMENT
+FROM POSTGRES_USERS.PUBLIC.USERS U
+LEFT OUTER JOIN MYSQL_ORDERS.ORDERS O ON U.ID = O.USER_ID
+LEFT OUTER JOIN MYSQL_ORDERS.ORDER_ITEMS OI ON O.ID = OI.ORDER_ID
+LEFT OUTER JOIN POSTGRES_USERS.PUBLIC.PRODUCTS P ON OI.PRODUCT_ID = P.ID
+LEFT OUTER JOIN MONGO_REVIEWS.REVIEW_DB.REVIEWS R ON (P.ID = R.PRODUCT_ID AND U.ID = R.USER_ID)
+ORDER BY U.ID,
+         O.ORDER_DATE DESC,
+         OI.ID

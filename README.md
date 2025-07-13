@@ -15,6 +15,47 @@ JOIN mongo.review_db.reviews    r ON p.id = r.product_id AND u.id = r.user_id
 
 ![gif demo of a terminal recording showing Claude Code adding a Postgres, MySQL, and MongoDB database via this MCP tool and issuing a SQL queries which joins data across them](./media/polydb-mcp-200-speed.gif)
 
+## How is This Different From Google's "MCP Toolbox for Databases"?
+
+Google recently announced an MCP tool for interacting with databases:
+
+- https://cloud.google.com/blog/products/ai-machine-learning/mcp-toolbox-for-databases-now-supports-model-context-protocol
+- https://github.com/googleapis/genai-toolbox
+
+The key differences are **federated queries vs. multiple tool calls** and **datasource availability**.
+
+### PolyDB Approach: Single Federated Query
+```sql
+-- One tool call, one SQL query across multiple datasources
+SELECT u.name, o.total, p.name as product, r.rating
+FROM postgres.users u
+...
+```
+
+### Traditional MCP Approach: Multiple Tool Calls + Data Wrangling
+```python
+# Tool call 1: Query PostgreSQL users
+users = query_postgres("SELECT * FROM users")
+
+# Tool call 2: Query MySQL orders  
+orders = query_mysql("SELECT * FROM orders")
+
+# Tool call 3: Query MongoDB reviews
+reviews = query_mongo("db.reviews.find()")
+
+# Tool call 4: Python code to join/aggregate the data
+result = merge_and_analyze(users, orders, reviews)
+```
+
+### Why This Matters
+
+**Performance**: PolyDB pushes joins and filtering down to the database level using Calcite's query optimization. Traditional approaches require pulling full datasets into memory for processing.
+
+**Complexity**: A single SQL query is easier to write, debug, and maintain than coordinating multiple tool calls with custom merge logic.
+
+**Datasource Support**: PolyDB works with any JDBC driver or Calcite adapter (SQL databases, MongoDB, Elasticsearch, CSV files, Excel sheets, etc.). Google MCP Toolbox [supports ~12 sources](https://googleapis.github.io/genai-toolbox/resources/sources/), while there exist hundreds of JDBC drivers and Calcite Adapters.
+
+
 ## Features
 
 - **Federated SQL Queries**: Execute SQL queries across multiple heterogeneous datasources (e.g., SQL/Document DB's, CSV/JSON files, Excel sheets, etc.) as if they were a single database, powered by Apache Calcite.
